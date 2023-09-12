@@ -4,46 +4,45 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export interface ITokenPayload {
-  id: string,
-  email: string,
-  roles: [string]
+  id: string;
+  email: string;
+  roles: [string];
 }
 
 class TokenService {
-  private readonly secretKey: Secret | undefined = process.env.SECRET_ACCESS_TOKEN_KEY;
+  private readonly secretKey: Secret | undefined =
+    process.env.SECRET_ACCESS_TOKEN_KEY;
 
-  generateAccessToken(user: any): { accessToken: string } {
+  generateAccessToken(user: any): string {
     try {
-      console.log(user)
+      console.log(user);
       if (!this.secretKey) {
-        throw new Error("Internal error")
+        throw new Error("Internal error");
       }
       const payload = {
         id: user.id,
         email: user.email,
-        roles: user.roles
-      }
+        roles: user.roles,
+      };
       const accessToken = jwt.sign(payload, this.secretKey, {
-        expiresIn: "15d"
-      })
-      return { accessToken: accessToken }
-    } catch (err) {
-      console.log(err)
-      return { accessToken: '' };
+        expiresIn: "15d",
+      });
+      return accessToken;
+    } catch (error) {
+      return "";
     }
   }
   validateAccessToken(token: string): ITokenPayload | null {
     try {
       if (!this.secretKey) {
-        throw new Error("Internal error")
+        throw new Error("Internal error");
       }
       const userPayload = jwt.verify(token, this.secretKey) as ITokenPayload;
       return userPayload;
-    } catch (err) {
-      console.log(err)
-      return null
+    } catch (error) {
+      return null;
     }
   }
 }
 
-export default new TokenService;
+export default new TokenService();

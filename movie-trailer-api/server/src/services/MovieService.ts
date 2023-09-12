@@ -1,6 +1,8 @@
 import IMovie from "../interfaces/MovieInterface.js";
+import IRating from "../interfaces/RatingInterface.js";
 import MovieRepository from "../repositories/MovieRepository.js";
-
+import { v4 as generateFileName } from 'uuid';
+import path from 'path';
 
 class MovieService {
   async createMovie(movieData: IMovie) {
@@ -95,11 +97,35 @@ class MovieService {
     }
   }
 
+  async save(file: any) {
+    try {
+      const fileExt = file.mimetype.split('/')[1];
+      const fileName = generateFileName() + '.' + fileExt;
+      const filePath = path.resolve('static', fileName);
+  
+      await file.mv(filePath);
+  
+      return fileName;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async deleteMovie(id: string) {
     try {
       const deletedMovie = await MovieRepository.deleteMovie(id);
 
       return deletedMovie;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async createRating(ratingData: IRating) {
+    try {
+      const savedRating = await MovieRepository.createRating(ratingData);
+
+      return savedRating;
     } catch (error) {
       throw error;
     }

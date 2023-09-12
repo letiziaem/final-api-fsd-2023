@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import movieRouter from "./routes/movieRouter.js";
+import authRouter from "./routes/authRouter.js";
 import cors from "cors";
 import fileUpload from "express-fileupload";
 import mongoose from "mongoose";
@@ -30,8 +31,11 @@ app.use(express.static("static"));
 //com esta biblioteca podemos inserir ficheiros
 app.use(fileUpload());
 
-// Import authorization routes
+// Import movies routes
 app.use("/api", movieRouter);
+
+// Import authorization routes
+app.use("/auth", authRouter);
 
 // The data format
 app.use(express.json());

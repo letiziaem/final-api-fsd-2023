@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Movie Trailer API</title>
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar container__fluid">
+      <a class="navbar__logo mediumtext" href="index.html">Homepage</a>
+      <div class="navbar__menu">
+        <ul class="navbar__menu__list">
+          <li class="btn--show-modal">
+            <a class="navbar__menu__list__item text" href="#">Login</a>
+          </li>
+        </ul>
+
+        <!--MODAL LOGIN-->
+        <div class="modal hidden" id="idModal">
+          <button class="btn--close-modal">&times;</button>
+          <h2 class="modal__header headline">Login to your account</h2>
+          <form class="modal__form" id="loginForm">
+            <label class="text">Email Address</label>
+            <input id="emailModal" type="email" />
+            <label class="text">Password</label>
+            <input id="passwordModal" type="password" />
+            <button class="button text">LOGIN &rarr;</button>
+          </form>
+        </div>
+        <div class="hidden"></div>
+      </div>
+    </nav>
+
+    <!-- Filters options -->
+    <section class="movie container">
+      <div class="row">
+        <div class="col-12">
+          <h2 class="movie__headline headline">Movie Trailer</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-5">
+          <label for="title" class="movie__form__label text">Movie Title:</label>
+          <select name="type" id="title" class="movie__form__select text">
+            <option value="all" class="movie__form__option smalltext">
+              Select a title
+            </option>
+          </select>
+        </div>
+        <div class="col-5">
+          <label for="genre" class="movie__movie__form__label text">Movie Genres:</label>
+          <select name="type" id="genres" class="movie__form__select text">
+            <option value="all" class="movie__form__option smalltext">
+              Select a genre
+            </option>
+          </select>
+        </div>
+        <div class="col-2">
+          <button class="button text" id="filter__btn">Search</button>
+        </div>
+      </div>
+      <!-- Movies cards should be displayed from here -->
+      <div class="row" id="movie__cards">
+        <div class="col-4">
+          <div class="movie__cards">
+            <div class="movie__cards__description">
+              <h5 class="text">Title</h5>
+              <p class="smalltext">release date</p>
+              <a class="smalltext" href="">See the trailer</a>
+            </div>
+            <div class="movie__cards__poster">
+              <img class="movie__cards__poster__img" src="./../static/no-image.jpeg" alt="">
+            </div>
+            <div class="movie__cards__footer">
+              <p class="smalltext">Genres:</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Footer (why not?!) -->
+    <footer></footer>
+    <script src="script.js"></script>
+  </body>
+</html>

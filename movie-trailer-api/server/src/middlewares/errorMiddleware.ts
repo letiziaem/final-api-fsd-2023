@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import ApiError from "../utils/ApiError.js";
 
+
 function errorMiddleware(
   err: Error,
   req: Request,
@@ -17,6 +18,6 @@ function errorMiddleware(
   } else {
     res.status(500).json({ error: "Internal Server Error" });
   }
-}
+};
 
 export default errorMiddleware;

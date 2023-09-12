@@ -1,0 +1,120 @@
+.navbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 3.5rem;
+
+  &__logo {
+    margin-left: 8px;
+    text-decoration: none;
+    color: #fffafa;
+  }
+
+  &__menu {
+    margin-right: 8px;
+    position: relative;
+
+    &__list {
+      list-style: none;
+      display: flex;
+      flex-direction: row;
+      gap: 24px;
+
+      &__item {
+        color: #fffafa;
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.menu__dropdown {
+  display: none;
+  background-color: #8b0000;
+  position: absolute;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+.navbar__menu__list__item:hover {
+  box-sizing: border-box;
+  opacity: 80%;
+  cursor: pointer;
+}
+
+.navbar__menu__list__item:hover .menu__dropdown {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 40rem;
+  background-color: #f3f3f3;
+  padding: 3rem 4rem;
+  box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  transition: all 0.5s;
+}
+
+.modal__header {
+  margin-bottom: 4rem;
+  line-height: 1.5;
+}
+
+.modal__form {
+  margin: 0 3rem;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.modal__form label {
+  font-size: 1.7rem;
+  font-weight: 500;
+}
+
+.modal__form input {
+  font-size: 1.2rem;
+  padding: 1rem 1.5rem;
+  border: 1px solid #dddddd;
+  border-radius: 0.5rem;
+}
+
+.modal__form button {
+  grid-column: 1 / span 2;
+  justify-self: center;
+  margin-top: 1rem;
+}
+
+.btn--close-modal {
+  font-family: inherit;
+  color: inherit;
+  position: absolute;
+  top: 0.5rem;
+  right: 2rem;
+  font-size: 3.5rem;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.btn {
+  font-family: Arial, Helvetica, sans-serif;
+  text-transform: uppercase;
+  padding: 0.8rem 1.2rem;
+  background: #8b0000;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}

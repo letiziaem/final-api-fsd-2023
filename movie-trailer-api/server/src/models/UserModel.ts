@@ -1,7 +1,20 @@
 import mongoose from "mongoose";
 import IUser from "../interfaces/UserInterface.js";
-import Role from "./../models/RoleModel.js";
 import bcrypt from 'bcryptjs';
+
+const RoleSchema = new mongoose.Schema({
+    name: {
+      type: String,
+      unique: true,
+      required: true,
+      uppercase: true,
+      trim: true,
+    },
+  });
+  
+  export interface IRole extends mongoose.Document {
+    name: string;
+  };
 
 const UserSchema = new mongoose.Schema({
     name: {
@@ -40,10 +53,11 @@ const UserSchema = new mongoose.Schema({
     roles: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Role",
-        default: "64d4ce1067e9ac029c7d140f"
+        default: "64f601d48cbe339f606b076b"
     }]
 });
 
+const RoleModel = mongoose.model<IRole>("Role", RoleSchema);    
 const UserModel = mongoose.model<IUser>("User", UserSchema);
 
-export default UserModel;
+export { RoleModel, UserModel };

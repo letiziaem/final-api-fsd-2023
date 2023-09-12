@@ -4,6 +4,7 @@ import IUser from "../interfaces/UserInterface.js";
 import MovieService from "../services/MovieService.js";
 import ApiError from "../utils/ApiError.js";
 import AuthService from "../services/AuthService.js";
+import IRating from "../interfaces/RatingInterface.js";
 
 class MovieController {
   async create(req: Request, res: Response, next: NextFunction) {
@@ -40,7 +41,7 @@ class MovieController {
         try {
           filters = JSON.parse(decodeURIComponent(filtersQuery));
         } catch (error) {
-          return next(ApiError.BadRequestError("Invalid filters JSON"));
+          next(ApiError.BadRequestError("Invalid filters JSON."));
         }
       }
 
@@ -65,7 +66,7 @@ class MovieController {
       const movie = await MovieService.getMovieById(id);
 
       if (!movie) {
-        throw ApiError.NotFoundError(`Movie not found for ${id}`);
+        throw ApiError.NotFoundError(`Movie not found for ${id}.`);
       }
 
       res.status(200).json(movie);
@@ -78,9 +79,11 @@ class MovieController {
     try {
       const { id } = req.params;
 
-      const { title, releaseDate, trailerLink, posterUrl, genres } = req.body;
+      const { title, releaseDate, trailerLink, genres } = req.body;
 
-      // const posterUrl = 
+      const poster = req.files?.image;
+
+      let posterUrl = 'no-image.jpg';
 
       const movieData = {
         title,
@@ -90,11 +93,23 @@ class MovieController {
         genres,
       } as IMovie;
 
-      let existingMovie: IMovie | null = await MovieService.updateMovie(id, movieData);
+      let existingMovie: IMovie | null = await MovieService.updateMovie(
+        id,
+        movieData
+      );
 
-      if(!existingMovie) {
-        throw ApiError.NotFoundError(`Movie not found for ${id}`);
+      if (!existingMovie) {
+        throw ApiError.NotFoundError(`Movie not found for ${id}.`);
       };
+
+      if (existingMovie) {
+        if(existingMovie.posterUrl && existingMovie.posterUrl !== 'no-image.jpg') {
+          await MovieService.deleteMovie(existingMovie.posterUrl);
+        }
+
+        if (poster) {
+          posterUrl = await MovieService.save(poster);
+        }
 
       existingMovie.title = title || existingMovie.title;
       existingMovie.releaseDate = releaseDate || existingMovie.releaseDate;
@@ -105,6 +120,7 @@ class MovieController {
       const updatedMovie = await existingMovie.save();
 
       res.status(200).json(updatedMovie);
+      }
     } catch (error) {
       next(error);
     }
@@ -115,16 +131,35 @@ class MovieController {
       const { id } = req.params;
 
       if (!AuthService.isAdmin(req.user as IUser)) {
-        throw ApiError.UnauthorizedError("Not authorized");
+        throw ApiError.UnauthorizedError("Not authorized.");
       }
 
       const deletedMovie: IMovie | null = await MovieService.deleteMovie(id);
 
-      if(!deletedMovie) {
-        throw ApiError.NotFoundError(`Movie not found for ${id}`);
+      if (!deletedMovie) {
+        throw ApiError.NotFoundError(`Movie not found for ${id}.`);
       }
 
       res.status(200).json(deletedMovie);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async createRating(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { movieId, userId, rating, comment } = req.body;
+
+      const newRating = ({
+        movie: movieId,
+        user: userId,
+        rating,
+        comment,
+      }) as IRating;
+
+      const savedRating = await MovieService.createRating(newRating);
+
+      res.status(201).json(savedRating);
     } catch (error) {
       next(error);
     }
