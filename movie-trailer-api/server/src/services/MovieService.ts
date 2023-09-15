@@ -36,6 +36,8 @@ class MovieService {
           const value = filters[key];
           if (key === "title") {
             defaultQuery[key] = { $regex: value, $options: "i" };
+          } else if (key === "id") {
+            defaultQuery[key] = { $regex: value, $options: "i" };
           } else if (
             key === "genres" &&
             Array.isArray(value) &&

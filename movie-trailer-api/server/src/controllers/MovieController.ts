@@ -9,13 +9,21 @@ import IRating from "../interfaces/RatingInterface.js";
 class MovieController {
   async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const { title, releaseDate, trailerLink, posterUrl, genres } = req.body;
+      const { title, releaseDate, trailerLink, genres } = req.body;
+
+      const poster = req.files?.posterUrl;
+
+      let posterImg = 'no-image.jpg';
+
+      if(poster) {
+        posterImg = await MovieService.save(poster);
+      } 
 
       const newMovie = {
         title,
         releaseDate,
         trailerLink,
-        posterUrl,
+        posterUrl: posterImg,
         genres,
       } as IMovie;
 
@@ -30,7 +38,7 @@ class MovieController {
   async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       const page = parseInt(req.query.page as string) || 1;
-      const limit = parseInt(req.query.limit as string) || 10;
+      const limit = parseInt(req.query.limit as string) || 15;
       const sortBy = (req.query.sortBy as string) || "releaseDate";
       const sortOrder = (req.query.sortOrder as string) || "desc";
       const filtersQuery = req.query.filters as string | undefined;
@@ -44,7 +52,7 @@ class MovieController {
           next(ApiError.BadRequestError("Invalid filters JSON."));
         }
       }
-
+      console.log(filters);
       const movies = await MovieService.getAllMovies(
         page,
         limit,
@@ -52,6 +60,12 @@ class MovieController {
         sortOrder,
         filters
       );
+
+      for (let i = 0; i < movies.movies.length; i++) {
+        const fullImageUrl = `${req.protocol}://${req.get("host")}/${movies.movies[i]?.posterUrl}`;
+
+        movies.movies[i].posterUrl = fullImageUrl;
+      };
 
       res.status(200).json(movies);
     } catch (error) {
@@ -81,15 +95,15 @@ class MovieController {
 
       const { title, releaseDate, trailerLink, genres } = req.body;
 
-      const poster = req.files?.image;
+      const poster = req.files?.posterUrl;
 
-      let posterUrl = 'no-image.jpg';
+      let posterImg = 'no-image.jpg';
 
       const movieData = {
         title,
         releaseDate,
         trailerLink,
-        posterUrl,
+        posterUrl: posterImg,
         genres,
       } as IMovie;
 
@@ -108,13 +122,13 @@ class MovieController {
         }
 
         if (poster) {
-          posterUrl = await MovieService.save(poster);
+          posterImg = await MovieService.save(poster);
         }
 
       existingMovie.title = title || existingMovie.title;
       existingMovie.releaseDate = releaseDate || existingMovie.releaseDate;
       existingMovie.trailerLink = trailerLink || existingMovie.trailerLink;
-      existingMovie.posterUrl = posterUrl || existingMovie.posterUrl;
+      existingMovie.posterUrl = posterImg || existingMovie.posterUrl;
       existingMovie.genres = genres || existingMovie.genres;
 
       const updatedMovie = await existingMovie.save();

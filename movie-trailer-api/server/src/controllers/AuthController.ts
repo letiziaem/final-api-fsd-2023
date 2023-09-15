@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import AuthService from "./../services/AuthService.js";
-import TokenService from "./../services/TokenService.js";
 import { IRole, RoleModel } from "./../models/UserModel.js";
 import ApiError from "../utils/ApiError.js";
 
@@ -83,7 +82,7 @@ class AuthController {
         throw ApiError.NotFoundError("Role not found.");
       }
 
-      res.json(deletedRole);
+      res.status(201).json(deletedRole);
     } catch (error) {
       next(ApiError.InternalServerError("Failed to delete."));
     }

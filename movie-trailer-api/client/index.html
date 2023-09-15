@@ -12,9 +12,10 @@
       <a class="navbar__logo mediumtext" href="index.html">Homepage</a>
       <div class="navbar__menu">
         <ul class="navbar__menu__list">
-          <li class="btn--show-modal">
+          <li class="btn--show-modal" id="login__container">
             <a class="navbar__menu__list__item text" href="#">Login</a>
           </li>
+          <li id="logout__container"></li>
         </ul>
 
         <!--MODAL LOGIN-->
@@ -50,7 +51,7 @@
           </select>
         </div>
         <div class="col-5">
-          <label for="genre" class="movie__movie__form__label text">Movie Genres:</label>
+          <label for="genres" class="movie__movie__form__label text">Movie Genres:</label>
           <select name="type" id="genres" class="movie__form__select text">
             <option value="all" class="movie__form__option smalltext">
               Select a genre
@@ -68,7 +69,7 @@
             <div class="movie__cards__description">
               <h5 class="text">Title</h5>
               <p class="smalltext">release date</p>
-              <a class="smalltext" href="">See the trailer</a>
+              <a href="" target="_blank">See the trailer</a>
             </div>
             <div class="movie__cards__poster">
               <img class="movie__cards__poster__img" src="./../static/no-image.jpeg" alt="">
