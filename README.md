@@ -1,2 +1,2 @@
 # movie-api
-Projeto final do módulo de back-end do curso Full Stack Development - EDIT 2023.
+Final project of the back-end module of the Full Stack Development Course - EDIT 2023.
